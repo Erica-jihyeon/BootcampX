@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Erica-jihyeon/BootcampX/issues"
   },
-  "homepage": "https://github.com/Erica-jihyeon/BootcampX#readme"
+  "homepage": "https://github.com/Erica-jihyeon/BootcampX#readme",
+  "dependencies": {
+    "pg": "^8.7.1"
+  }
 }
