@@ -10,6 +10,10 @@ const args = process.argv.slice(2);
 const cohort = args[0];
 const limit = args[1];
 
+pool.connect()
+.then(() => console.log('db connected'))
+.catch(err => console.error('db connection error', err.stack));
+
 // pool.query(`
 // SELECT students.id as student_id, students.name as name, cohorts.name as cohort
 // FROM students
@@ -24,14 +28,17 @@ const limit = args[1];
 // })
 // .catch(err => console.error('query error', err.stack));
 
+const queryString = `
+  SELECT students.id as student_id, students.name as name, cohorts.name as cohort
+  FROM students
+  JOIN cohorts ON cohorts.id = cohort_id
+  WHERE cohorts.name LIKE $1
+  LIMIT $2;
+  `;
 
-pool.query(`
-SELECT students.id as student_id, students.name as name, cohorts.name as cohort
-FROM students
-JOIN cohorts ON cohorts.id = students.cohort_id
-WHERE cohorts.name LIKE $1 || '%'
-LIMIT $2;
-`, [cohort, limit])
+const values = [`%${cohort}%`, limit];
+
+pool.query(queryString, values)
 .then(res => {
   // console.log(res.rows);
   res.rows.forEach(user => {
